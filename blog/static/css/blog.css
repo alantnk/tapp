@@ -95,3 +95,30 @@ input[type=submit] {
     font-size:12px;
     color:#666;
 }
+
+form {
+    padding: 10px 0;
+    input {
+        margin: 0;
+        &[type="submit"] {
+            cursor: pointer;
+        }
+    }
+}
+
+
+.errorlist{
+    margin:0;
+}
+
+.field-wrapper {
+    display:flex;
+    flex-direction:column;
+    width:250px;
+    padding-bottom:25px;
+
+    textarea {
+        width:500px;
+    }
+}
+

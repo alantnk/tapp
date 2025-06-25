@@ -1,0 +1,24 @@
+<h2>Add a new comment</h2>
+<form action="{% url 'blog:post_comment' post.id %}" method="post" novalidate>
+    <div class="left">
+        {{ form.name.label_tag }}
+
+        {{ form.name.as_text }}
+        {{ form.name.errors }}
+
+    </div>
+    <div class="left">
+        {{ form.email.label_tag }}
+
+        {{ form.email.as_text }}
+        {{ form.email.errors }}
+
+    </div>
+    {{ form.body.label_tag }}
+
+    {{ form.body.as_textarea }}
+    {{ form.body.errors }}
+
+    {% csrf_token %}
+    <p><input type="submit" value="Add comment"></p>
+</form>
