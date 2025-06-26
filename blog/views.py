@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
+from taggit.models import Tag
 
 from blog.models import Post
 from .forms import EmailPostForm, CommentForm
@@ -14,6 +15,11 @@ class PostListView(View):
     _post_list = Post.published.all()
 
     def get(self, request, *args, **kwargs):
+        tag_slug = kwargs.get('tag_slug', None)
+        tag = None
+        if tag_slug:
+            tag = get_object_or_404(Tag, name=tag_slug)
+            self._post_list = self._post_list.filter(tags__in=[tag])
         paginator = Paginator(self._post_list, 3)
         page_number = request.GET.get('page', 1)
 
@@ -24,7 +30,10 @@ class PostListView(View):
         return render(
             request,
             'blog/post/list.html',
-            {'posts': posts}
+            {
+                'posts': posts,
+                'tag': tag
+            }
         )
 
 
