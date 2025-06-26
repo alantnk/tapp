@@ -13,14 +13,18 @@
     {% endblock %}
 </div>
 <div id="sidebar">
-    <h2>My blog</h2>
+    <div class="nav-items">
+        <a href="/blog">Home</a>
+        <a href="/blog/search">Search</a>
+    </div>
+    <h2>Py blog</h2>
     <p>
-        This is my blog.
+        This is Py Blog.
         I've written {% total_posts %} posts so far.
     </p>
     <p>
         <a href="{% url 'blog:post_feed' %}">
-            Subscribe to my RSS feed
+            Subscribe to RSS feed
         </a>
     </p>
     <h3>Latest posts</h3>
@@ -34,6 +38,8 @@
         </li>
         {% endfor %}
     </ul>
+
+
 </div>
 </body>
 </html>

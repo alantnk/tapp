@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 from blog.sitemaps import PostSitemap
 
@@ -33,4 +34,9 @@ urlpatterns = [
         {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'
     ),
+    path("", RedirectView.as_view(url="blog/")),
 ]
+
+admin.AdminSite.site_header = "Admin Site"
+admin.AdminSite.site_title = "🔐"
+admin.AdminSite.index_title = "Staff-Only Zone"

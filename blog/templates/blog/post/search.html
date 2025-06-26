@@ -22,9 +22,18 @@
 <p><a href="{% url 'blog:post_search' %}">Search again</a></p>
 {% else %}
 <h1>Search for posts</h1>
-<form method="get">
-    {{ form.as_p }}
+<form method="get" novalidate>
+    <div>
+
+        {{ form.query.label_tag }}
+
+        {{ form.query.as_text }}
+        {{ form.query.errors }}
+    </div>
+    <p>
+
     <input type="submit" value="Search">
+    </p>
 </form>
 {% endif %}
 {% endblock %}
