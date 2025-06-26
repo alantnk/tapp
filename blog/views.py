@@ -1,5 +1,8 @@
 from functools import partial
 
+from django.contrib.postgres.search import (
+    TrigramSimilarity
+)
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
@@ -9,7 +12,7 @@ from django.views.generic import View
 from taggit.models import Tag
 
 from blog.models import Post
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 
 
 class PostListView(View):
@@ -140,5 +143,34 @@ class PostCommentView(View):
                 'post': post,
                 'form': form,
                 'comment': comment
+            }
+        )
+
+
+class PostSearchView(View):
+    _form = SearchForm()
+    _query = None
+    _results = []
+
+    def get(self, request, *args, **kwargs):
+        if 'query' in request.GET:
+            self._form = SearchForm(request.GET)
+        if self._form.is_valid():
+            self._query = self._form.cleaned_data['query']
+
+            self._results = (
+                Post.published.annotate(
+                    similarity=TrigramSimilarity('title', self._query),
+                )
+                .filter(similarity__gt=0.1)
+                .order_by('-similarity')
+            )
+        return render(
+            request,
+            'blog/post/search.html',
+            {
+                'form': self._form,
+                'query': self._query,
+                'results': self._results
             }
         )

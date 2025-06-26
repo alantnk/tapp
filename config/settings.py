@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 from pathlib import Path
+from urllib.parse import urlparse
 
 from decouple import config
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     # Local apps
     'blog.apps.BlogConfig',
@@ -82,10 +84,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+parsedDatabaseUrl = urlparse(config("DATABASE_URL"))
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": config("DATABASE_ENGINE"),
+        "NAME": parsedDatabaseUrl.path.replace("/", ""),
+        "USER": parsedDatabaseUrl.username,
+        "PASSWORD": parsedDatabaseUrl.password,
+        "HOST": parsedDatabaseUrl.hostname,
+        "PORT": parsedDatabaseUrl.port,
     }
 }
 

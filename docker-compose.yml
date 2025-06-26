@@ -1,0 +1,13 @@
+services:
+
+  db:
+    image: postgres:16.2
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: masterkey
+      POSTGRES_USER: django
+      POSTGRES_DB: blog_db
+    ports:
+      - "5432:5432"
+
